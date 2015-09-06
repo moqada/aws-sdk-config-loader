@@ -1,0 +1,4 @@
+extends: moqada
+
+rules:
+  no-param-reassign: 1

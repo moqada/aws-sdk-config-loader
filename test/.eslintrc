@@ -1,0 +1,4 @@
+env:
+  mocha: true
+rules:
+  prefer-reflect: 0
