@@ -26,6 +26,12 @@ describe('loader', () => {
     assert(AWS.config.region === undefined);
   });
 
+  it('env.HOME does not set', () => {
+    delete process.env.HOME;
+    loader(AWS);
+    assert(AWS.config.region === undefined);
+  });
+
   describe('set $HOME/.aws/config', () => {
     let stub = null;
 
