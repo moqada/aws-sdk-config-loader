@@ -1,5 +1,7 @@
 import path from 'path';
 
+import osHomeDir from 'os-homedir';
+
 
 /**
  * return region string load from config file or environment variables.
@@ -12,10 +14,10 @@ function regionProvider(AWS) {
   if (region) {
     return region;
   }
+  const homedir = osHomeDir();
   const filename = (
     process.env.AWS_CONFIG_FILE
-    || process.env.HOME
-    && path.join(process.env.HOME, '.aws', 'config')
+    || homedir && path.join(homedir, '.aws', 'config')
   );
   if (!filename) {
     return region;

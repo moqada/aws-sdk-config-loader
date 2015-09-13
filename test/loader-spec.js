@@ -11,6 +11,7 @@ describe('loader', () => {
   beforeEach(() => {
     orgConfig = AWS.config;
     process.env.HOME = __dirname;
+    process.env.USER = process.env.LOGNAME = 'test';
     delete process.env.AWS_CONFIG_FILE;
     delete process.env.AWS_REGION;
     delete process.env.AMAZON_REGION;
@@ -28,6 +29,8 @@ describe('loader', () => {
 
   it('env.HOME does not set', () => {
     delete process.env.HOME;
+    delete process.env.USER;
+    delete process.env.LOGNAME;
     loader(AWS);
     assert(AWS.config.region === undefined);
   });
