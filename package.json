@@ -1,6 +1,6 @@
 {
   "name": "aws-sdk-config-loader",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "AWS config file loader for CLI tools",
   "author": "moqada <moqada@gmail.com>",
   "bugs": {
