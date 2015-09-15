@@ -39,12 +39,12 @@ loader(AWS);
 
 
 [npm-url]: https://www.npmjs.com/package/aws-sdk-config-loader
-[npm-image]: https://img.shields.io/npm/v/aws-sdk-config-loader.svg
+[npm-image]: https://img.shields.io/npm/v/aws-sdk-config-loader.svg?style=flat-square
 [npm-download-url]: https://www.npmjs.com/package/aws-sdk-config-loader
-[npm-download-image]: https://img.shields.io/npm/dm/aws-sdk-config-loader.svg
+[npm-download-image]: https://img.shields.io/npm/dm/aws-sdk-config-loader.svg?style=flat-square
 [travis-url]: https://travis-ci.org/moqada/aws-sdk-config-loader
-[travis-image]: https://img.shields.io/travis/moqada/aws-sdk-config-loader.svg
+[travis-image]: https://img.shields.io/travis/moqada/aws-sdk-config-loader.svg?style=flat-square
 [daviddm-dev-url]: https://david-dm.org/moqada/aws-sdk-config-loader#info=devDependencies
-[daviddm-dev-image]: https://img.shields.io/david/dev/moqada/aws-sdk-config-loader.svg
+[daviddm-dev-image]: https://img.shields.io/david/dev/moqada/aws-sdk-config-loader.svg?style=flat-square
 [license-url]: http://opensource.org/licenses/MIT
-[license-image]: https://img.shields.io/npm/l/aws-sdk-config-loader.svg
+[license-image]: https://img.shields.io/npm/l/aws-sdk-config-loader.svg?style=flat-square
