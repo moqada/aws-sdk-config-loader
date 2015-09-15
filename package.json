@@ -10,10 +10,12 @@
     "aws-sdk": "^2.1.50",
     "babel": "^5.8.23",
     "babel-plugin-espower": "^1.0.0",
+    "coveralls": "^2.11.4",
     "eslint": "^1.3.1",
     "eslint-config-moqada": "^3.0.0",
     "isparta": "^3.0.4",
     "mocha": "^2.3.0",
+    "mocha-lcov-reporter": "0.0.2",
     "power-assert": "^1.0.0",
     "sinon": "^1.16.1"
   },
@@ -33,8 +35,9 @@
   },
   "scripts": {
     "build": "rm -r lib && babel src --out-dir lib",
+    "coveralls": "cat coverage/lcov.info | coveralls",
     "publish": "npm run build && npm publish",
-    "test": "eslint src && babel-node $(npm bin)/isparta cover --report text --report html $(npm bin)/_mocha -- --require test/hook test/*spec.js",
+    "test": "eslint src && babel-node $(npm bin)/isparta cover --report text --report html --report lcovonly $(npm bin)/_mocha -- --require test/hook test/*spec.js",
     "testing": "mocha --require test/hook --watch test/*spec.js"
   },
   "dependencies": {
