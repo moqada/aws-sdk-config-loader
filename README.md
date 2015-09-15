@@ -3,6 +3,7 @@
 [![NPM version][npm-image]][npm-url]
 [![NPM downloads][npm-download-image]][npm-download-url]
 [![Build Status][travis-image]][travis-url]
+[![Coverage Status][coveralls-image]][coveralls-url]
 [![DevDependency Status][daviddm-dev-image]][daviddm-dev-url]
 [![License][license-image]][license-url]
 
@@ -44,6 +45,8 @@ loader(AWS);
 [npm-download-image]: https://img.shields.io/npm/dm/aws-sdk-config-loader.svg?style=flat-square
 [travis-url]: https://travis-ci.org/moqada/aws-sdk-config-loader
 [travis-image]: https://img.shields.io/travis/moqada/aws-sdk-config-loader.svg?style=flat-square
+[coveralls-url]: https://coveralls.io/github/moqada/aws-sdk-config-loader
+[coveralls-image]: https://img.shields.io/coveralls/moqada/aws-sdk-config-loader.svg?style=flat-square
 [daviddm-dev-url]: https://david-dm.org/moqada/aws-sdk-config-loader#info=devDependencies
 [daviddm-dev-image]: https://img.shields.io/david/dev/moqada/aws-sdk-config-loader.svg?style=flat-square
 [license-url]: http://opensource.org/licenses/MIT
