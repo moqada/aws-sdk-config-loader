@@ -42,7 +42,7 @@ loader(AWS);
 [npm-url]: https://www.npmjs.com/package/aws-sdk-config-loader
 [npm-image]: https://img.shields.io/npm/v/aws-sdk-config-loader.svg?style=flat-square
 [npm-download-url]: https://www.npmjs.com/package/aws-sdk-config-loader
-[npm-download-image]: https://img.shields.io/npm/dm/aws-sdk-config-loader.svg?style=flat-square
+[npm-download-image]: https://img.shields.io/npm/dt/aws-sdk-config-loader.svg?style=flat-square
 [travis-url]: https://travis-ci.org/moqada/aws-sdk-config-loader
 [travis-image]: https://img.shields.io/travis/moqada/aws-sdk-config-loader.svg?style=flat-square
 [coveralls-url]: https://coveralls.io/github/moqada/aws-sdk-config-loader
