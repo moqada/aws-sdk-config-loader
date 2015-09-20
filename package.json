@@ -36,8 +36,8 @@
     "build": "rm -r lib && babel src --out-dir lib",
     "coveralls": "cat coverage/lcov.info | coveralls",
     "publish": "npm run build && npm publish",
-    "test": "eslint src && babel-node $(npm bin)/isparta cover --report text --report html --report lcovonly $(npm bin)/_mocha -- --require test/hook test/*spec.js",
-    "testing": "mocha --require test/hook --watch test/*spec.js"
+    "test": "eslint src && babel-node $(npm bin)/isparta cover --report text --report html --report lcovonly _mocha -- test/**/*spec.js",
+    "testing": "mocha --watch test/**/*spec.js"
   },
   "dependencies": {
     "os-homedir": "^1.0.1"
