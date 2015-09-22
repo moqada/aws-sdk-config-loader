@@ -1,6 +1,6 @@
 {
   "name": "aws-sdk-config-loader",
-  "version": "0.2.0",
+  "version": "0.3.1",
   "description": "AWS config file loader for CLI tools",
   "author": "moqada <moqada@gmail.com>",
   "bugs": {
@@ -41,8 +41,8 @@
     "esdoc": "esdoc -c esdoc.json",
     "lint": "eslint {src,test}",
     "coveralls": "cat coverage/lcov.info | coveralls",
-    "prepublish": "npm run --if-present build",
-    "publish": "npm run build && npm publish",
+    "prepublish": "git diff --exit-code && npm run --if-present build",
+    "postpublish": "npm run deploy",
     "test": "npm run lint && babel-node $(npm bin)/isparta cover --report text --report html --report lcovonly _mocha -- test/{**/,}*spec.js",
     "testing": "mocha --watch test/{**/,}*spec.js"
   },
