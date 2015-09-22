@@ -14,6 +14,7 @@
     "esdoc": "^0.3.0",
     "eslint": "^1.5.0",
     "eslint-config-moqada": "^4.1.1",
+    "gh-pages": "^0.4.0",
     "isparta": "^3.0.4",
     "mocha": "^2.3.0",
     "power-assert": "^1.0.0",
@@ -36,6 +37,7 @@
   },
   "scripts": {
     "build": "rm -rf lib && babel src --out-dir lib",
+    "deploy": "npm run esdoc && gh-pages -d docs",
     "esdoc": "esdoc -c esdoc.json",
     "lint": "eslint {src,test}",
     "coveralls": "cat coverage/lcov.info | coveralls",
