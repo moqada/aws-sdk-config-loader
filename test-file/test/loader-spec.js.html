@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">test/loader-spec.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+</head>
+<body class="layout-container">
+
+<header>
+  <a href="./">Home</a>
+  <a href="identifiers.html">Identifier</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <a data-ice="repoURL" href="git+https://github.com/moqada/aws-sdk-config-loader.git">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-configProvider">configProvider</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-loader">loader</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">configs</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-environmentConfigs">environmentConfigs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-fileConfigs">fileConfigs</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">test/loader-spec.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import path from &apos;path&apos;;
+
+import AWS from &apos;aws-sdk&apos;;
+import sinon from &apos;sinon&apos;;
+import assert from &apos;power-assert&apos;;
+import proxyquire from &apos;proxyquire&apos;;
+
+import configProvider from &apos;../src/configProvider&apos;;
+import environmentConfigs from &apos;../src/configs/environmentConfigs&apos;;
+import fileConfigs from &apos;../src/configs/fileConfigs&apos;;
+import {resetEnv, fixtureDir} from &apos;./helpers&apos;;
+
+
+/** @test {loader} */
+describe(&apos;aws-sdk-config-loader&apos;, () =&gt; {
+  let orgConfigKeys = null;
+  let loader = null;
+  let sandbox = null;
+  let stubs = null;
+
+  beforeEach(done =&gt; {
+    resetEnv();
+    process.env.HOME = path.join(fixtureDir(), &apos;default&apos;);
+    orgConfigKeys = Object.assign({}, AWS.Config.prototype.keys);
+    sandbox = sinon.sandbox.create();
+    stubs = {
+      configProvider: sandbox.spy(configProvider)
+    };
+    loader = proxyquire(&apos;../src&apos;, {
+      &apos;./configProvider&apos;: stubs.configProvider
+    });
+    done();
+  });
+
+  afterEach(done =&gt; {
+    resetEnv();
+    sandbox.restore();
+    stubs = null;
+    AWS.Config.prototype.keys = orgConfigKeys;
+    done();
+  });
+
+  it(&apos;override AWS.config&apos;, () =&gt; {
+    loader(AWS);
+    assert(stubs.configProvider.args.length === 1);
+    assert.deepEqual(stubs.configProvider.args[0], [
+      AWS,
+      [fileConfigs, environmentConfigs],
+      {}
+    ]);
+    assert(AWS.config.region === &apos;ap-northeast-1&apos;);
+    assert(AWS.config.credentials.accessKeyId === &apos;default_key_id&apos;);
+    assert(AWS.config.credentials.secretAccessKey === &apos;default_secret_key&apos;);
+  });
+
+  context(&apos;when apply options&apos;, () =&gt; {
+    it(&apos;override config and credentials&apos;, () =&gt; {
+      const opts = {profile: &apos;customize&apos;};
+      loader(AWS, opts);
+      assert(stubs.configProvider.args.length === 1);
+      assert.deepEqual(stubs.configProvider.args[0], [
+        AWS,
+        [fileConfigs, environmentConfigs],
+        opts
+      ]);
+      assert(AWS.config.region === &apos;us-east-1&apos;);
+      assert(AWS.config.credentials.accessKeyId === &apos;customize_key_id&apos;);
+      assert(AWS.config.credentials.secretAccessKey === &apos;customize_secret_key&apos;);
+    });
+
+    it(&apos;and apply noReflectCredentials override only config&apos;, () =&gt; {
+      const opts = {
+        profile: &apos;customize&apos;,
+        noReflectCredentials: true
+      };
+      loader(AWS, opts);
+      assert(stubs.configProvider.args.length === 1);
+      assert.deepEqual(stubs.configProvider.args[0], [
+        AWS,
+        [fileConfigs, environmentConfigs],
+        opts
+      ]);
+      assert(AWS.config.region === &apos;us-east-1&apos;);
+      assert(AWS.config.credentials.accessKeyId === &apos;default_key_id&apos;);
+      assert(AWS.config.credentials.secretAccessKey === &apos;default_secret_key&apos;);
+    });
+
+    it(&apos;and apply noReflectCredentials and throw error&apos;, () =&gt; {
+      const opts = {
+        profile: &apos;customize&apos;
+      };
+      class StubCredentials {
+        get(cb) {
+          cb(&apos;err&apos;);
+        }
+      }
+      sandbox.stub(AWS, &apos;SharedIniFileCredentials&apos;, StubCredentials);
+      loader(AWS, opts);
+      assert(AWS.config.region === &apos;us-east-1&apos;);
+      assert(AWS.config.credentials === null);
+    });
+  });
+});
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.3.0)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{
+  "coverage": "100%",
+  "expectCount": 4,
+  "actualCount": 4,
+  "files": {
+    "src/configProvider.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/configs/environmentConfigs.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/configs/fileConfigs.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/index.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    }
+  }
+}

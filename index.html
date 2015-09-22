@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl">
+  <title data-ice="title">API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+</head>
+<body class="layout-container">
+
+<header>
+  <a href="./">Home</a>
+  <a href="identifiers.html">Identifier</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <a data-ice="repoURL" href="git+https://github.com/moqada/aws-sdk-config-loader.git">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-configProvider">configProvider</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-loader">loader</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">configs</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-environmentConfigs">environmentConfigs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-fileConfigs">fileConfigs</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="aws-sdk-config-loader">aws-sdk-config-loader</h1>
+<p><a href="https://www.npmjs.com/package/aws-sdk-config-loader"><img src="https://img.shields.io/npm/v/aws-sdk-config-loader.svg?style=flat-square" alt="NPM version"></a>
+<a href="https://www.npmjs.com/package/aws-sdk-config-loader"><img src="https://img.shields.io/npm/dt/aws-sdk-config-loader.svg?style=flat-square" alt="NPM downloads"></a>
+<a href="https://travis-ci.org/moqada/aws-sdk-config-loader"><img src="https://img.shields.io/travis/moqada/aws-sdk-config-loader.svg?style=flat-square" alt="Build Status"></a>
+<a href="https://coveralls.io/github/moqada/aws-sdk-config-loader"><img src="https://img.shields.io/coveralls/moqada/aws-sdk-config-loader.svg?style=flat-square" alt="Coverage Status"></a>
+<a href="https://david-dm.org/moqada/aws-sdk-config-loader#info=devDependencies"><img src="https://img.shields.io/david/dev/moqada/aws-sdk-config-loader.svg?style=flat-square" alt="DevDependency Status"></a>
+<a href="http://opensource.org/licenses/MIT"><img src="https://img.shields.io/npm/l/aws-sdk-config-loader.svg?style=flat-square" alt="License"></a></p>
+<p>AWS config file loader for CLI tools.</p>
+<p>this library load <code>~/.aws/config</code> that <a href="https://github.com/aws/aws-sdk-js">aws-sdk-js</a> is not supported.</p>
+<h2 id="installation">Installation</h2>
+<pre><code><code class="source-code prettyprint">npm install aws-sdk-config-loader aws-sdk</code>
+</code></pre><h2 id="usage">Usage</h2>
+<p>put following <code>~/.aws/credentials</code></p>
+<pre><code><code class="source-code prettyprint">[default]
+aws_access_key_id = default_key_id
+aws_secret_access_key = default_secret_key
+[foo]
+aws_access_key_id = foo_key_id
+aws_secret_access_key = foo_secret_key</code>
+</code></pre><p>put following <code>~/.aws/config</code>.</p>
+<pre><code><code class="source-code prettyprint">[default]
+region = ap-northeast-1
+[foo]
+region = us-east-1</code>
+</code></pre><pre><code class="lang-javascript"><code class="source-code prettyprint">import AWS from &apos;aws-sdk&apos;;
+import loader from &apos;aws-sdk-config-loader&apos;;
+
+loader(AWS);
+// AWS.config.region === &apos;ap-northeast-1&apos;
+// AWS.config.credentials.accessKeyId = &apos;default_key_id&apos;
+// AWS.config.credentials.secretAccessKey = &apos;default_secret_key&apos;
+
+// export AWS_PROFILE=foo
+loader(AWS);
+// AWS.config.region === &apos;us-east-1&apos;
+// AWS.config.credentials.accessKeyId = &apos;foo_key_id&apos;
+// AWS.config.credentials.secretAccessKey = &apos;foo_secret_key&apos;
+
+// export AWS_CONFIG_FILE=/path/to/config
+loader(AWS);
+// set AWS.config from /path/to/config
+
+loader(AWS, {profile: &apos;foo&apos;})
+// AWS.config.region === &apos;us-east-1&apos;
+// AWS.config.credentials.accessKeyId = &apos;foo_key_id&apos;
+// AWS.config.credentials.secretAccessKey = &apos;foo_secret_key&apos;
+
+loader(AWS, {profile: &apos;foo&apos;, noReflectCredentials: true})
+// AWS.config.region === &apos;us-east-1&apos;
+// AWS.config.credentials.accessKeyId = &apos;default_key_id&apos;
+// AWS.config.credentials.secretAccessKey = &apos;default_secret_key&apos;</code>
+</code></pre>
+</div>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.3.0)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

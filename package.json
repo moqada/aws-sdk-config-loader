@@ -1,0 +1,52 @@
+{
+  "name": "aws-sdk-config-loader",
+  "version": "0.2.0",
+  "description": "AWS config file loader for CLI tools",
+  "author": "moqada <moqada@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/moqada/aws-sdk-config-loader/issues"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.1.50",
+    "babel": "^5.8.23",
+    "babel-plugin-espower": "^1.0.0",
+    "coveralls": "^2.11.4",
+    "esdoc": "^0.3.0",
+    "eslint": "^1.5.0",
+    "eslint-config-moqada": "^4.1.1",
+    "gh-pages": "^0.4.0",
+    "isparta": "^3.0.4",
+    "mocha": "^2.3.0",
+    "power-assert": "^1.0.0",
+    "proxyquire": "^1.7.2",
+    "sinon": "^1.16.1"
+  },
+  "files": [
+    "lib"
+  ],
+  "homepage": "https://github.com/moqada/aws-sdk-config-loader#readme",
+  "keywords": [
+    "aws",
+    "cli"
+  ],
+  "license": "MIT",
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moqada/aws-sdk-config-loader.git"
+  },
+  "scripts": {
+    "build": "rm -rf lib && babel src --out-dir lib",
+    "deploy": "npm run esdoc && gh-pages -d docs",
+    "esdoc": "esdoc -c esdoc.json",
+    "lint": "eslint {src,test}",
+    "coveralls": "cat coverage/lcov.info | coveralls",
+    "prepublish": "npm run --if-present build",
+    "publish": "npm run build && npm publish",
+    "test": "npm run lint && babel-node $(npm bin)/isparta cover --report text --report html --report lcovonly _mocha -- test/{**/,}*spec.js",
+    "testing": "mocha --watch test/{**/,}*spec.js"
+  },
+  "dependencies": {
+    "os-homedir": "^1.0.1"
+  }
+}

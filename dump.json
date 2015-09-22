@@ -1,0 +1,1367 @@
+[
+  {
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "src/configProvider.js",
+    "memberof": null,
+    "longname": "src/configProvider.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 9,
+    "content": "/**\n * return config object\n *\n * @param {Object} AWS AWS SDK module\n * @param {Function[]} getters function list\n * @param {Object} opts options\n * @return {Object}\n */\nexport default function configProvider(AWS, getters, opts = {}) {\n  let config = {region: undefined};\n  for (const getter of getters) {\n    config = getter(config, AWS, opts);\n  }\n  return config;\n}\n"
+  },
+  {
+    "kind": "function",
+    "static": true,
+    "variation": null,
+    "name": "configProvider",
+    "memberof": "src/configProvider.js",
+    "longname": "src/configProvider.js~configProvider",
+    "access": null,
+    "export": true,
+    "importPath": "aws-sdk-config-loader/src/configProvider.js",
+    "importStyle": "configProvider",
+    "description": "return config object",
+    "lineNumber": 9,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "AWS",
+        "description": "AWS SDK module"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Function[]"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "getters",
+        "description": "function list"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "opts",
+        "description": "options"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Object"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "generator": false
+  },
+  {
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "src/configs/environmentConfigs.js",
+    "memberof": null,
+    "longname": "src/configs/environmentConfigs.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 7,
+    "content": "/**\n * return config object load from environment variables.\n *\n * @param {Object} config config object\n * @return {Object}\n */\nexport default function environmentConfigs(config) {\n  const region = process.env.AWS_REGION || process.env.AMAZON_REGION;\n  if (region) {\n    return Object.assign({}, config, {region});\n  }\n  return config;\n}\n"
+  },
+  {
+    "kind": "function",
+    "static": true,
+    "variation": null,
+    "name": "environmentConfigs",
+    "memberof": "src/configs/environmentConfigs.js",
+    "longname": "src/configs/environmentConfigs.js~environmentConfigs",
+    "access": null,
+    "export": true,
+    "importPath": "aws-sdk-config-loader/src/configs/environmentConfigs.js",
+    "importStyle": "environmentConfigs",
+    "description": "return config object load from environment variables.",
+    "lineNumber": 7,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "config",
+        "description": "config object"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Object"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "generator": false
+  },
+  {
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "src/configs/fileConfigs.js",
+    "memberof": null,
+    "longname": "src/configs/fileConfigs.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import path from 'path';\n\nimport osHomeDir from 'os-homedir';\n\n\n/**\n * return default config file path\n *\n * @return {string|null}\n */\nfunction getDefaultConfigFile() {\n  const homedir = osHomeDir();\n  return homedir && path.join(homedir, '.aws', 'config');\n}\n\n\n/**\n * return config object load from config file.\n *\n * @param {Object} config config object\n * @param {Object} AWS AWS SDK module\n * @param {Object} opts options\n * @param {string} opts.profile profile name\n * @param {string} opts.configFile config file path\n * @return {Object}\n */\nexport default function fileConfigs(config, AWS, opts = {}) {\n  const filename = opts.configFile || process.env.AWS_CONFIG_FILE || getDefaultConfigFile();\n  if (!filename) {\n    return config;\n  }\n  const prof = opts.profile || process.env.AWS_PROFILE || 'default';\n  try {\n    const conf = AWS.util.ini.parse(AWS.util.readFileSync(filename))[prof];\n    if (typeof conf === 'object' && conf.region) {\n      return Object.assign({}, config, {region: conf.region});\n    }\n    return config;\n  } catch (err) {\n    return config;\n  }\n}\n"
+  },
+  {
+    "kind": "function",
+    "static": true,
+    "variation": null,
+    "name": "getDefaultConfigFile",
+    "memberof": "src/configs/fileConfigs.js",
+    "longname": "src/configs/fileConfigs.js~getDefaultConfigFile",
+    "access": null,
+    "export": false,
+    "importPath": "aws-sdk-config-loader/src/configs/fileConfigs.js",
+    "importStyle": null,
+    "description": "return default config file path",
+    "lineNumber": 11,
+    "params": [],
+    "return": {
+      "nullable": null,
+      "types": [
+        "string",
+        "null"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "generator": false
+  },
+  {
+    "kind": "function",
+    "static": true,
+    "variation": null,
+    "name": "fileConfigs",
+    "memberof": "src/configs/fileConfigs.js",
+    "longname": "src/configs/fileConfigs.js~fileConfigs",
+    "access": null,
+    "export": true,
+    "importPath": "aws-sdk-config-loader/src/configs/fileConfigs.js",
+    "importStyle": "fileConfigs",
+    "description": "return config object load from config file.",
+    "lineNumber": 27,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "config",
+        "description": "config object"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "AWS",
+        "description": "AWS SDK module"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "opts",
+        "description": "options"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "opts.profile",
+        "description": "profile name"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "opts.configFile",
+        "description": "config file path"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Object"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "generator": false
+  },
+  {
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "src/index.js",
+    "memberof": null,
+    "longname": "src/index.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import environmentConfigs from './configs/environmentConfigs';\nimport fileConfigs from './configs/fileConfigs';\nimport configProvider from './configProvider';\n\n/**\n * initialize AWS.config using regionProvider\n *\n * @param {Object} AWS AWS SDK module\n * @param {Object} opts options\n * @param {string} opts.profile profile name\n * @param {boolean} opts.noReflectCredentials opts.profile doesnot reflect credentials\n */\nexport default function loader(AWS, opts = {}) {\n  AWS.util.update(AWS.Config.prototype.keys, configProvider(AWS, [\n    fileConfigs,\n    environmentConfigs\n  ], opts));\n  if (!opts.noReflectCredentials) {\n    AWS.util.update(AWS.Config.prototype.keys, {\n      credentials: () => {\n        let credentials = null;\n        new AWS.CredentialProviderChain([\n          () => new AWS.EnvironmentCredentials('AWS'),\n          () => new AWS.EnvironmentCredentials('AMAZON'),\n          () => new AWS.SharedIniFileCredentials({profile: opts.profile})\n        ]).resolve((err, creds) => {\n          if (!err) {\n            credentials = creds;\n          }\n        });\n        return credentials;\n      }\n    });\n  }\n  AWS.config = new AWS.Config();\n}\n"
+  },
+  {
+    "kind": "function",
+    "static": true,
+    "variation": null,
+    "name": "loader",
+    "memberof": "src/index.js",
+    "longname": "src/index.js~loader",
+    "access": null,
+    "export": true,
+    "importPath": "aws-sdk-config-loader/src/index.js",
+    "importStyle": "loader",
+    "description": "initialize AWS.config using regionProvider",
+    "lineNumber": 13,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "AWS",
+        "description": "AWS SDK module"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "opts",
+        "description": "options"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "opts.profile",
+        "description": "profile name"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "boolean"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "opts.noReflectCredentials",
+        "description": "opts.profile doesnot reflect credentials"
+      }
+    ],
+    "generator": false
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Infinity",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Infinity",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Infinity",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "NaN",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~NaN",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "undefined",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~undefined",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "null",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~null",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Object",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Object",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "object",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~object",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Function",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Function",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "function",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~function",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Boolean",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Boolean",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "boolean",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~boolean",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Symbol",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Symbol",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Error",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Error",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "EvalError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/EvalError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~EvalError",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "InternalError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/InternalError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~InternalError",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "RangeError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RangeError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~RangeError",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "ReferenceError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~ReferenceError",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "SyntaxError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SyntaxError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~SyntaxError",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "TypeError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypeError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~TypeError",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "URIError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/URIError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~URIError",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Number",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Number",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "number",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~number",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Date",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Date",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "String",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~String",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "string",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~string",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "RegExp",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~RegExp",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Int8Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int8Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Int8Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Uint8Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint8Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Uint8ClampedArray",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint8ClampedArray",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Int16Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int16Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Int16Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Uint16Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint16Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Int32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Int32Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Uint32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint32Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Float32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Float32Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Float64Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Float64Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Map",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Map",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Set",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Set",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "WeakMap",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~WeakMap",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "WeakSet",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~WeakSet",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "ArrayBuffer",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~ArrayBuffer",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "DataView",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~DataView",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "JSON",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~JSON",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Promise",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Promise",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Generator",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Generator",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "GeneratorFunction",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~GeneratorFunction",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Reflect",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Reflect",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Proxy",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Proxy",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "CanvasRenderingContext2D",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~CanvasRenderingContext2D",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "DocumentFragment",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~DocumentFragment",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Element",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Element",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~Element",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Event",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Event",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~Event",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Node",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Node",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~Node",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "NodeList",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/NodeList",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~NodeList",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "XMLHttpRequest",
+    "externalLink": "https://developer.mozilla.org/en/docs/Web/API/XMLHttpRequest",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~XMLHttpRequest",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "kind": "testFile",
+    "static": true,
+    "variation": null,
+    "name": "test/configProvider-spec.js",
+    "memberof": null,
+    "longname": "test/configProvider-spec.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import AWS from 'aws-sdk';\nimport assert from 'power-assert';\nimport sinon from 'sinon';\n\nimport configProvider from '../src/configProvider';\n\n\n/** @test {configProvider} */\ndescribe('configProvider()', () => {\n  it('when apply multiple getteres return overriden config', () => {\n    const getters = [\n      config => config,\n      config => Object.assign({}, config, {region: 'foo'}),\n      config => config,\n      config => Object.assign({}, config, {region: 'bar'})\n    ];\n    assert.deepEqual(configProvider(AWS, getters), {region: 'bar'});\n  });\n\n  it('when doesnot apply getters return default config', () => {\n    assert.deepEqual(configProvider(AWS, []), {region: undefined});\n  });\n\n  it('when apply options getter args applied options', () => {\n    const spy = sinon.spy(config => config);\n    const getters = [spy];\n    const opts = {profile: 'buz'};\n    assert.deepEqual(configProvider(AWS, getters, opts), {region: undefined});\n    assert(spy.args.length === 1);\n    assert.deepEqual(spy.args[0], [\n      {region: undefined},\n      AWS,\n      opts\n    ]);\n  });\n});\n"
+  },
+  {
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe0",
+    "testId": 0,
+    "memberof": "test/configProvider-spec.js",
+    "testDepth": 0,
+    "longname": "test/configProvider-spec.js~describe0",
+    "access": null,
+    "description": "configProvider()",
+    "lineNumber": 9,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{configProvider}"
+      }
+    ],
+    "testTargets": [
+      "configProvider"
+    ]
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it1",
+    "testId": 1,
+    "memberof": "test/configProvider-spec.js~describe0",
+    "testDepth": 1,
+    "longname": "test/configProvider-spec.js~describe0.it1",
+    "access": null,
+    "description": "when apply multiple getteres return overriden config",
+    "lineNumber": 10
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it2",
+    "testId": 2,
+    "memberof": "test/configProvider-spec.js~describe0",
+    "testDepth": 1,
+    "longname": "test/configProvider-spec.js~describe0.it2",
+    "access": null,
+    "description": "when doesnot apply getters return default config",
+    "lineNumber": 20
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it3",
+    "testId": 3,
+    "memberof": "test/configProvider-spec.js~describe0",
+    "testDepth": 1,
+    "longname": "test/configProvider-spec.js~describe0.it3",
+    "access": null,
+    "description": "when apply options getter args applied options",
+    "lineNumber": 24
+  },
+  {
+    "kind": "testFile",
+    "static": true,
+    "variation": null,
+    "name": "test/configs/environmentConfigs-spec.js",
+    "memberof": null,
+    "longname": "test/configs/environmentConfigs-spec.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import assert from 'power-assert';\n\nimport environmentConfigs from '../../src/configs/environmentConfigs';\nimport {resetEnv} from '../helpers';\n\n\n/** @test {environmentConfigs} */\ndescribe('environmentConfigs()', () => {\n  let defaultConfig = null;\n  beforeEach(() => {\n    resetEnv();\n    defaultConfig = {region: undefined};\n  });\n  afterEach(resetEnv);\n\n  it('when no specific env return default config', () => {\n    assert.deepEqual(environmentConfigs(defaultConfig), {region: undefined});\n  });\n\n  it('when env.AWS_REGION exists return overriden config', () => {\n    process.env.AWS_REGION = 'foo';\n    assert.deepEqual(environmentConfigs(defaultConfig), {region: 'foo'});\n  });\n\n  it('when env.AMAZON_REGION exists return overriden config', () => {\n    process.env.AMAZON_REGION = 'bar';\n    assert.deepEqual(environmentConfigs(defaultConfig), {region: 'bar'});\n  });\n\n  it('when AMAZON_REGION and AWS_REGION exists return overriden config by AWS_REGION', () => {\n    process.env.AWS_REGION = 'foo';\n    process.env.AMAZON_REGION = 'bar';\n    assert.deepEqual(environmentConfigs(defaultConfig), {region: 'foo'});\n  });\n});\n"
+  },
+  {
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe4",
+    "testId": 4,
+    "memberof": "test/configs/environmentConfigs-spec.js",
+    "testDepth": 0,
+    "longname": "test/configs/environmentConfigs-spec.js~describe4",
+    "access": null,
+    "description": "environmentConfigs()",
+    "lineNumber": 8,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{environmentConfigs}"
+      }
+    ],
+    "testTargets": [
+      "environmentConfigs"
+    ]
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it5",
+    "testId": 5,
+    "memberof": "test/configs/environmentConfigs-spec.js~describe4",
+    "testDepth": 1,
+    "longname": "test/configs/environmentConfigs-spec.js~describe4.it5",
+    "access": null,
+    "description": "when no specific env return default config",
+    "lineNumber": 16
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it6",
+    "testId": 6,
+    "memberof": "test/configs/environmentConfigs-spec.js~describe4",
+    "testDepth": 1,
+    "longname": "test/configs/environmentConfigs-spec.js~describe4.it6",
+    "access": null,
+    "description": "when env.AWS_REGION exists return overriden config",
+    "lineNumber": 20
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it7",
+    "testId": 7,
+    "memberof": "test/configs/environmentConfigs-spec.js~describe4",
+    "testDepth": 1,
+    "longname": "test/configs/environmentConfigs-spec.js~describe4.it7",
+    "access": null,
+    "description": "when env.AMAZON_REGION exists return overriden config",
+    "lineNumber": 25
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it8",
+    "testId": 8,
+    "memberof": "test/configs/environmentConfigs-spec.js~describe4",
+    "testDepth": 1,
+    "longname": "test/configs/environmentConfigs-spec.js~describe4.it8",
+    "access": null,
+    "description": "when AMAZON_REGION and AWS_REGION exists return overriden config by AWS_REGION",
+    "lineNumber": 30
+  },
+  {
+    "kind": "testFile",
+    "static": true,
+    "variation": null,
+    "name": "test/configs/fileConfigs-spec.js",
+    "memberof": null,
+    "longname": "test/configs/fileConfigs-spec.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import path from 'path';\n\nimport AWS from 'aws-sdk';\nimport assert from 'power-assert';\nimport proxyquire from 'proxyquire';\n\nimport {resetEnv, fixtureDir} from '../helpers';\n\n\n/** @test {fileConfigs} */\ndescribe('fileConfigs()', () => {\n  const defaultConfig = {region: undefined};\n  let fileConfigs = null;\n\n  beforeEach(() => {\n    resetEnv();\n    fileConfigs = proxyquire('../../src/configs/fileConfigs', {\n      'os-homedir': () => path.join(fixtureDir(), 'default')\n    });\n  });\n\n  afterEach(() => {\n    resetEnv();\n  });\n\n  it('return default profile config', () => {\n    assert.deepEqual(fileConfigs(defaultConfig, AWS), {region: 'ap-northeast-1'});\n  });\n\n  it('when env.HOME and env.AWS_CONFIG_FILE doesnot exists return default config', () => {\n    fileConfigs = proxyquire('../../src/configs/fileConfigs', {\n      'os-homedir': () => null\n    });\n    assert.deepEqual(fileConfigs(defaultConfig, AWS), {region: undefined});\n  });\n\n  it('when default profile doesnot exists in file return default config', () => {\n    fileConfigs = proxyquire('../../src/configs/fileConfigs', {\n      'os-homedir': () => path.join(fixtureDir(), 'non-default')\n    });\n    assert.deepEqual(fileConfigs(defaultConfig, AWS), {region: undefined});\n  });\n\n  it('when set env.AWS_CONFIG_FILE return config from specific file', () => {\n    process.env.AWS_CONFIG_FILE = path.join(fixtureDir(), 'specification-config');\n    assert.deepEqual(fileConfigs(defaultConfig, AWS), {region: 'us-west-1'});\n  });\n\n  it('when config file doesnot exists return default config', () => {\n    fileConfigs = proxyquire('../../src/configs/fileConfigs', {\n      'os-homedir': () => path.join(fixtureDir(), 'unknown')\n    });\n    assert.deepEqual(fileConfigs(defaultConfig, AWS), {region: undefined});\n  });\n\n  context('when set env.AWS_PROFILE', () => {\n    it('and profile exists in file return specific profile config', () => {\n      process.env.AWS_PROFILE = 'customize';\n      assert.deepEqual(fileConfigs(defaultConfig, AWS), {region: 'us-east-1'});\n    });\n    it('and profile doesnot exists in file return default config', () => {\n      process.env.AWS_PROFILE = 'unknown';\n      assert.deepEqual(fileConfigs(defaultConfig, AWS), {region: undefined});\n    });\n  });\n\n  it('when apply opts.profile return config using opts.profile', () => {\n    assert.deepEqual(\n      fileConfigs(defaultConfig, AWS, {profile: 'customize'}),\n      {region: 'us-east-1'}\n    );\n  });\n\n  it('when apply opts.configFile return config from opts.configFile', () => {\n    const configFile = path.join(fixtureDir(), 'specification-config');\n    assert.deepEqual(\n      fileConfigs(defaultConfig, AWS, {configFile}),\n      {region: 'us-west-1'}\n    );\n  });\n});\n"
+  },
+  {
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe9",
+    "testId": 9,
+    "memberof": "test/configs/fileConfigs-spec.js",
+    "testDepth": 0,
+    "longname": "test/configs/fileConfigs-spec.js~describe9",
+    "access": null,
+    "description": "fileConfigs()",
+    "lineNumber": 11,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{fileConfigs}"
+      }
+    ],
+    "testTargets": [
+      "fileConfigs"
+    ]
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it10",
+    "testId": 10,
+    "memberof": "test/configs/fileConfigs-spec.js~describe9",
+    "testDepth": 1,
+    "longname": "test/configs/fileConfigs-spec.js~describe9.it10",
+    "access": null,
+    "description": "return default profile config",
+    "lineNumber": 26
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it11",
+    "testId": 11,
+    "memberof": "test/configs/fileConfigs-spec.js~describe9",
+    "testDepth": 1,
+    "longname": "test/configs/fileConfigs-spec.js~describe9.it11",
+    "access": null,
+    "description": "when env.HOME and env.AWS_CONFIG_FILE doesnot exists return default config",
+    "lineNumber": 30
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it12",
+    "testId": 12,
+    "memberof": "test/configs/fileConfigs-spec.js~describe9",
+    "testDepth": 1,
+    "longname": "test/configs/fileConfigs-spec.js~describe9.it12",
+    "access": null,
+    "description": "when default profile doesnot exists in file return default config",
+    "lineNumber": 37
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it13",
+    "testId": 13,
+    "memberof": "test/configs/fileConfigs-spec.js~describe9",
+    "testDepth": 1,
+    "longname": "test/configs/fileConfigs-spec.js~describe9.it13",
+    "access": null,
+    "description": "when set env.AWS_CONFIG_FILE return config from specific file",
+    "lineNumber": 44
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it14",
+    "testId": 14,
+    "memberof": "test/configs/fileConfigs-spec.js~describe9",
+    "testDepth": 1,
+    "longname": "test/configs/fileConfigs-spec.js~describe9.it14",
+    "access": null,
+    "description": "when config file doesnot exists return default config",
+    "lineNumber": 49
+  },
+  {
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context15",
+    "testId": 15,
+    "memberof": "test/configs/fileConfigs-spec.js~describe9",
+    "testDepth": 1,
+    "longname": "test/configs/fileConfigs-spec.js~describe9.context15",
+    "access": null,
+    "description": "when set env.AWS_PROFILE",
+    "lineNumber": 56
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it16",
+    "testId": 16,
+    "memberof": "test/configs/fileConfigs-spec.js~describe9.context15",
+    "testDepth": 2,
+    "longname": "test/configs/fileConfigs-spec.js~describe9.context15.it16",
+    "access": null,
+    "description": "and profile exists in file return specific profile config",
+    "lineNumber": 57
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it17",
+    "testId": 17,
+    "memberof": "test/configs/fileConfigs-spec.js~describe9.context15",
+    "testDepth": 2,
+    "longname": "test/configs/fileConfigs-spec.js~describe9.context15.it17",
+    "access": null,
+    "description": "and profile doesnot exists in file return default config",
+    "lineNumber": 61
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it18",
+    "testId": 18,
+    "memberof": "test/configs/fileConfigs-spec.js~describe9",
+    "testDepth": 1,
+    "longname": "test/configs/fileConfigs-spec.js~describe9.it18",
+    "access": null,
+    "description": "when apply opts.profile return config using opts.profile",
+    "lineNumber": 67
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it19",
+    "testId": 19,
+    "memberof": "test/configs/fileConfigs-spec.js~describe9",
+    "testDepth": 1,
+    "longname": "test/configs/fileConfigs-spec.js~describe9.it19",
+    "access": null,
+    "description": "when apply opts.configFile return config from opts.configFile",
+    "lineNumber": 74
+  },
+  {
+    "kind": "testFile",
+    "static": true,
+    "variation": null,
+    "name": "test/loader-spec.js",
+    "memberof": null,
+    "longname": "test/loader-spec.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import path from 'path';\n\nimport AWS from 'aws-sdk';\nimport sinon from 'sinon';\nimport assert from 'power-assert';\nimport proxyquire from 'proxyquire';\n\nimport configProvider from '../src/configProvider';\nimport environmentConfigs from '../src/configs/environmentConfigs';\nimport fileConfigs from '../src/configs/fileConfigs';\nimport {resetEnv, fixtureDir} from './helpers';\n\n\n/** @test {loader} */\ndescribe('aws-sdk-config-loader', () => {\n  let orgConfigKeys = null;\n  let loader = null;\n  let sandbox = null;\n  let stubs = null;\n\n  beforeEach(done => {\n    resetEnv();\n    process.env.HOME = path.join(fixtureDir(), 'default');\n    orgConfigKeys = Object.assign({}, AWS.Config.prototype.keys);\n    sandbox = sinon.sandbox.create();\n    stubs = {\n      configProvider: sandbox.spy(configProvider)\n    };\n    loader = proxyquire('../src', {\n      './configProvider': stubs.configProvider\n    });\n    done();\n  });\n\n  afterEach(done => {\n    resetEnv();\n    sandbox.restore();\n    stubs = null;\n    AWS.Config.prototype.keys = orgConfigKeys;\n    done();\n  });\n\n  it('override AWS.config', () => {\n    loader(AWS);\n    assert(stubs.configProvider.args.length === 1);\n    assert.deepEqual(stubs.configProvider.args[0], [\n      AWS,\n      [fileConfigs, environmentConfigs],\n      {}\n    ]);\n    assert(AWS.config.region === 'ap-northeast-1');\n    assert(AWS.config.credentials.accessKeyId === 'default_key_id');\n    assert(AWS.config.credentials.secretAccessKey === 'default_secret_key');\n  });\n\n  context('when apply options', () => {\n    it('override config and credentials', () => {\n      const opts = {profile: 'customize'};\n      loader(AWS, opts);\n      assert(stubs.configProvider.args.length === 1);\n      assert.deepEqual(stubs.configProvider.args[0], [\n        AWS,\n        [fileConfigs, environmentConfigs],\n        opts\n      ]);\n      assert(AWS.config.region === 'us-east-1');\n      assert(AWS.config.credentials.accessKeyId === 'customize_key_id');\n      assert(AWS.config.credentials.secretAccessKey === 'customize_secret_key');\n    });\n\n    it('and apply noReflectCredentials override only config', () => {\n      const opts = {\n        profile: 'customize',\n        noReflectCredentials: true\n      };\n      loader(AWS, opts);\n      assert(stubs.configProvider.args.length === 1);\n      assert.deepEqual(stubs.configProvider.args[0], [\n        AWS,\n        [fileConfigs, environmentConfigs],\n        opts\n      ]);\n      assert(AWS.config.region === 'us-east-1');\n      assert(AWS.config.credentials.accessKeyId === 'default_key_id');\n      assert(AWS.config.credentials.secretAccessKey === 'default_secret_key');\n    });\n\n    it('and apply noReflectCredentials and throw error', () => {\n      const opts = {\n        profile: 'customize'\n      };\n      class StubCredentials {\n        get(cb) {\n          cb('err');\n        }\n      }\n      sandbox.stub(AWS, 'SharedIniFileCredentials', StubCredentials);\n      loader(AWS, opts);\n      assert(AWS.config.region === 'us-east-1');\n      assert(AWS.config.credentials === null);\n    });\n  });\n});\n"
+  },
+  {
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe20",
+    "testId": 20,
+    "memberof": "test/loader-spec.js",
+    "testDepth": 0,
+    "longname": "test/loader-spec.js~describe20",
+    "access": null,
+    "description": "aws-sdk-config-loader",
+    "lineNumber": 15,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{loader}"
+      }
+    ],
+    "testTargets": [
+      "loader"
+    ]
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it21",
+    "testId": 21,
+    "memberof": "test/loader-spec.js~describe20",
+    "testDepth": 1,
+    "longname": "test/loader-spec.js~describe20.it21",
+    "access": null,
+    "description": "override AWS.config",
+    "lineNumber": 43
+  },
+  {
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context22",
+    "testId": 22,
+    "memberof": "test/loader-spec.js~describe20",
+    "testDepth": 1,
+    "longname": "test/loader-spec.js~describe20.context22",
+    "access": null,
+    "description": "when apply options",
+    "lineNumber": 56
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it23",
+    "testId": 23,
+    "memberof": "test/loader-spec.js~describe20.context22",
+    "testDepth": 2,
+    "longname": "test/loader-spec.js~describe20.context22.it23",
+    "access": null,
+    "description": "override config and credentials",
+    "lineNumber": 57
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it24",
+    "testId": 24,
+    "memberof": "test/loader-spec.js~describe20.context22",
+    "testDepth": 2,
+    "longname": "test/loader-spec.js~describe20.context22.it24",
+    "access": null,
+    "description": "and apply noReflectCredentials override only config",
+    "lineNumber": 71
+  },
+  {
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it25",
+    "testId": 25,
+    "memberof": "test/loader-spec.js~describe20.context22",
+    "testDepth": 2,
+    "longname": "test/loader-spec.js~describe20.context22.it25",
+    "access": null,
+    "description": "and apply noReflectCredentials and throw error",
+    "lineNumber": 88
+  }
+]
