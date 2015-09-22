@@ -21,11 +21,24 @@ npm install aws-sdk-config-loader aws-sdk
 
 ## Usage
 
+put following `~/.aws/credentials`
+
+```
+[default]
+aws_access_key_id = default_key_id
+aws_secret_access_key = default_secret_key
+[foo]
+aws_access_key_id = foo_key_id
+aws_secret_access_key = foo_secret_key
+```
+
 put following `~/.aws/config`.
 
 ```
 [default]
 region = ap-northeast-1
+[foo]
+region = us-east-1
 ```
 
 
@@ -34,8 +47,29 @@ import AWS from 'aws-sdk';
 import loader from 'aws-sdk-config-loader';
 
 loader(AWS);
-
 // AWS.config.region === 'ap-northeast-1'
+// AWS.config.credentials.accessKeyId = 'default_key_id'
+// AWS.config.credentials.secretAccessKey = 'default_secret_key'
+
+// export AWS_PROFILE=foo
+loader(AWS);
+// AWS.config.region === 'us-east-1'
+// AWS.config.credentials.accessKeyId = 'foo_key_id'
+// AWS.config.credentials.secretAccessKey = 'foo_secret_key'
+
+// export AWS_CONFIG_FILE=/path/to/config
+loader(AWS);
+// set AWS.config from /path/to/config
+
+loader(AWS, {profile: 'foo'})
+// AWS.config.region === 'us-east-1'
+// AWS.config.credentials.accessKeyId = 'foo_key_id'
+// AWS.config.credentials.secretAccessKey = 'foo_secret_key'
+
+loader(AWS, {profile: 'foo', noReflectCredentials: true})
+// AWS.config.region === 'us-east-1'
+// AWS.config.credentials.accessKeyId = 'default_key_id'
+// AWS.config.credentials.secretAccessKey = 'default_secret_key'
 ```
 
 
