@@ -45,7 +45,24 @@ describe('aws-sdk-config-loader', () => {
     assert(stubs.configProvider.args.length === 1);
     assert.deepEqual(stubs.configProvider.args[0], [
       AWS,
-      [stubs.fileConfigs, stubs.environmentConfigs]
+      [stubs.fileConfigs, stubs.environmentConfigs],
+      {}
+    ]);
+    assert(AWS.config.region === 'ap-northeast-1');
+    done();
+  });
+
+  it('override AWS.confg by options', done => {
+    const opts = {
+      configFile: './foo/bar/config',
+      profile: 'buz'
+    };
+    loader(AWS, opts);
+    assert(stubs.configProvider.args.length === 1);
+    assert.deepEqual(stubs.configProvider.args[0], [
+      AWS,
+      [stubs.fileConfigs, stubs.environmentConfigs],
+      opts
     ]);
     assert(AWS.config.region === 'ap-northeast-1');
     done();

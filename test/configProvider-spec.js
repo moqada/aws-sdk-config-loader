@@ -1,5 +1,6 @@
 import AWS from 'aws-sdk';
 import assert from 'power-assert';
+import sinon from 'sinon';
 
 import configProvider from '../src/configProvider';
 
@@ -17,5 +18,21 @@ describe('configProvider()', () => {
 
   it('when doesnot apply getters return default config', () => {
     assert.deepEqual(configProvider(AWS, []), {region: undefined});
+  });
+
+  it('when apply options getter args applied options', () => {
+    const spy = sinon.spy(config => config);
+    const getters = [spy];
+    const opts = {
+      config: '/foo/bar/config',
+      profile: 'buz'
+    };
+    assert.deepEqual(configProvider(AWS, getters, opts), {region: undefined});
+    assert(spy.args.length === 1);
+    assert.deepEqual(spy.args[0], [
+      {region: undefined},
+      AWS,
+      opts
+    ]);
   });
 });

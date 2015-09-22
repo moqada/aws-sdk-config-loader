@@ -19,14 +19,17 @@ function getDefaultConfigFile() {
  *
  * @param {Object} config config object
  * @param {Object} AWS AWS SDK module
+ * @param {Object} opts options
+ * @param {string} opts.profile profile name
+ * @param {string} opts.configFile config file path
  * @return {Object}
  */
-export default function fileConfigs(config, AWS) {
-  const filename = process.env.AWS_CONFIG_FILE || getDefaultConfigFile();
+export default function fileConfigs(config, AWS, opts = {}) {
+  const filename = opts.configFile || process.env.AWS_CONFIG_FILE || getDefaultConfigFile();
   if (!filename) {
     return config;
   }
-  const prof = process.env.AWS_PROFILE || 'default';
+  const prof = opts.profile || process.env.AWS_PROFILE || 'default';
   try {
     const conf = AWS.util.ini.parse(AWS.util.readFileSync(filename))[prof];
     if (typeof conf === 'object' && conf.region) {

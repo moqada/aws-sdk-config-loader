@@ -61,4 +61,19 @@ describe('fileConfigs()', () => {
       assert.deepEqual(fileConfigs(defaultConfig, AWS), {region: undefined});
     });
   });
+
+  it('when apply opts.profile return config using opts.profile', () => {
+    assert.deepEqual(
+      fileConfigs(defaultConfig, AWS, {profile: 'customize'}),
+      {region: 'us-east-1'}
+    );
+  });
+
+  it('when apply opts.configFile return config from opts.configFile', () => {
+    const configFile = path.join(fixtureDir(), 'specification-config');
+    assert.deepEqual(
+      fileConfigs(defaultConfig, AWS, {configFile}),
+      {region: 'us-west-1'}
+    );
+  });
 });
