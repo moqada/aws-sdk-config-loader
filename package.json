@@ -34,10 +34,11 @@
   },
   "scripts": {
     "build": "rm -r lib && babel src --out-dir lib",
+    "lint": "eslint {src,test}",
     "coveralls": "cat coverage/lcov.info | coveralls",
     "publish": "npm run build && npm publish",
-    "test": "eslint src && babel-node $(npm bin)/isparta cover --report text --report html --report lcovonly _mocha -- test/**/*spec.js",
-    "testing": "mocha --watch test/**/*spec.js"
+    "test": "npm run lint && babel-node $(npm bin)/isparta cover --report text --report html --report lcovonly _mocha -- test/{**/,}*spec.js",
+    "testing": "mocha --watch test/{**/,}*spec.js"
   },
   "dependencies": {
     "os-homedir": "^1.0.1"
