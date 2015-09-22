@@ -53,10 +53,7 @@ describe('aws-sdk-config-loader', () => {
   });
 
   it('override AWS.confg by options', done => {
-    const opts = {
-      configFile: './foo/bar/config',
-      profile: 'buz'
-    };
+    const opts = {profile: 'buz'};
     loader(AWS, opts);
     assert(stubs.configProvider.args.length === 1);
     assert.deepEqual(stubs.configProvider.args[0], [

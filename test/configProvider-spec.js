@@ -23,10 +23,7 @@ describe('configProvider()', () => {
   it('when apply options getter args applied options', () => {
     const spy = sinon.spy(config => config);
     const getters = [spy];
-    const opts = {
-      config: '/foo/bar/config',
-      profile: 'buz'
-    };
+    const opts = {profile: 'buz'};
     assert.deepEqual(configProvider(AWS, getters, opts), {region: undefined});
     assert(spy.args.length === 1);
     assert.deepEqual(spy.args[0], [
