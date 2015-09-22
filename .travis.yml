@@ -4,4 +4,3 @@ node_js:
   - '0.12'
 after_success:
   - npm run coveralls
-  - '[ $TRAVIS_BRANCH = master ] && git config credential.helper "store --file=.git/credentials" && echo "https://${GH_TOKEN}:@github.com" > .git/credentials && npm run deploy'
