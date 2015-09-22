@@ -21,6 +21,8 @@ npm install aws-sdk-config-loader aws-sdk
 
 ## Usage
 
+API Document: https://moqada.github.io/aws-sdk-config-loader/
+
 put following `~/.aws/credentials`
 
 ```
