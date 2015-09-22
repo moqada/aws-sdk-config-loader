@@ -6,6 +6,8 @@ import proxyquire from 'proxyquire';
 
 import {resetEnv, fixtureDir} from '../helpers';
 
+
+/** @test {fileConfigs} */
 describe('fileConfigs()', () => {
   const defaultConfig = {region: undefined};
   let fileConfigs = null;

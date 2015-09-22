@@ -4,6 +4,7 @@ import environmentConfigs from '../../src/configs/environmentConfigs';
 import {resetEnv} from '../helpers';
 
 
+/** @test {environmentConfigs} */
 describe('environmentConfigs()', () => {
   let defaultConfig = null;
   beforeEach(() => {

@@ -11,6 +11,7 @@ import fileConfigs from '../src/configs/fileConfigs';
 import {resetEnv, fixtureDir} from './helpers';
 
 
+/** @test {loader} */
 describe('aws-sdk-config-loader', () => {
   let orgConfigKeys = null;
   let loader = null;

@@ -5,6 +5,7 @@ import sinon from 'sinon';
 import configProvider from '../src/configProvider';
 
 
+/** @test {configProvider} */
 describe('configProvider()', () => {
   it('when apply multiple getteres return overriden config', () => {
     const getters = [
