@@ -34,7 +34,7 @@
     "url": "git+https://github.com/moqada/aws-sdk-config-loader.git"
   },
   "scripts": {
-    "build": "rm -r lib && babel src --out-dir lib",
+    "build": "rm -rf lib && babel src --out-dir lib",
     "lint": "eslint {src,test}",
     "coveralls": "cat coverage/lcov.info | coveralls",
     "prepublish": "npm run --if-present build",
