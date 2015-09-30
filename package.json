@@ -33,7 +33,7 @@
   "main": "lib/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/moqada/aws-sdk-config-loader.git"
+    "url": "https://github.com/moqada/aws-sdk-config-loader.git"
   },
   "scripts": {
     "build": "rm -rf lib && babel src --out-dir lib",
