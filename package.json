@@ -17,6 +17,7 @@
     "gh-pages": "^0.4.0",
     "isparta": "^3.0.4",
     "mocha": "^2.3.0",
+    "npm-run-all": "^1.2.12",
     "power-assert": "^1.0.0",
     "proxyquire": "^1.7.2",
     "sinon": "^1.16.1"
@@ -36,15 +37,22 @@
     "url": "https://github.com/moqada/aws-sdk-config-loader.git"
   },
   "scripts": {
-    "build": "rm -rf lib && babel src --out-dir lib",
-    "deploy": "npm run esdoc && gh-pages -d docs",
-    "esdoc": "esdoc -c esdoc.json",
+    "build": "babel src --out-dir lib",
+    "deploy": "npm-run-all doc gh-pages",
+    "doc": "esdoc -c esdoc.json",
+    "gh-pages": "gh-pages -d docs",
     "lint": "eslint {src,test}",
     "codecov": "cat coverage/lcov.info | codecov",
+    "prebuild": "rm -rf lib",
+    "predoc": "rm -rf docs",
     "prepublish": "git diff --exit-code && npm run --if-present build",
+    "pretest": "rm -rf coverage",
     "postpublish": "npm run deploy",
-    "test": "npm run lint && babel-node $(npm bin)/isparta cover --report text --report html --report lcovonly _mocha -- test/{**/,}*spec.js",
-    "testing": "mocha --watch test/{**/,}*spec.js"
+    "test": "npm-run-all lint test:*",
+    "test:coverage": "babel-node $(npm bin)/isparta cover --report text --report html --report lcovonly _mocha -- test/{**/,}*spec.js",
+    "watch": "npm-run-all --parallel watch:*",
+    "watch:src": "babel --out-dir=lib --watch src",
+    "watch:test": "mocha --watch test/{**/,}*spec.js"
   },
   "dependencies": {
     "os-homedir": "^1.0.1"
