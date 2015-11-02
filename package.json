@@ -7,7 +7,7 @@
     "url": "https://github.com/moqada/aws-sdk-config-loader/issues"
   },
   "devDependencies": {
-    "aws-sdk": "^2.2.12",
+    "aws-sdk": "^2.2.14",
     "babel": "^5.8.23",
     "babel-plugin-espower": "^1.0.0",
     "codecov.io": "^0.1.6",
