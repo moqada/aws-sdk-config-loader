@@ -8,6 +8,8 @@ node_js:
   - '0.12'
   - 4
   - stable
+before_install:
+  - npm install -g npm@latest
 before_script:
   - npm prune
 after_success:
