@@ -1,5 +1,6 @@
 [
   {
+    "__docId__": 0,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -12,6 +13,7 @@
     "content": "/**\n * return config object\n *\n * @param {Object} AWS AWS SDK module\n * @param {Function[]} getters function list\n * @param {Object} opts options\n * @return {Object}\n */\nexport default function configProvider(AWS, getters, opts = {}) {\n  let config = {region: undefined};\n  for (const getter of getters) {\n    config = getter(config, AWS, opts);\n  }\n  return config;\n}\n"
   },
   {
+    "__docId__": 1,
     "kind": "function",
     "static": true,
     "variation": null,
@@ -67,6 +69,7 @@
     "generator": false
   },
   {
+    "__docId__": 2,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -79,6 +82,7 @@
     "content": "/**\n * return config object load from environment variables.\n *\n * @param {Object} config config object\n * @return {Object}\n */\nexport default function environmentConfigs(config) {\n  const region = process.env.AWS_REGION || process.env.AMAZON_REGION;\n  if (region) {\n    return Object.assign({}, config, {region});\n  }\n  return config;\n}\n"
   },
   {
+    "__docId__": 3,
     "kind": "function",
     "static": true,
     "variation": null,
@@ -114,6 +118,7 @@
     "generator": false
   },
   {
+    "__docId__": 4,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -126,6 +131,7 @@
     "content": "import path from 'path';\n\nimport osHomeDir from 'os-homedir';\n\n\n/**\n * return default config file path\n *\n * @return {string|null}\n */\nfunction getDefaultConfigFile() {\n  const homedir = osHomeDir();\n  return homedir && path.join(homedir, '.aws', 'config');\n}\n\n\n/**\n * return config object load from config file.\n *\n * @param {Object} config config object\n * @param {Object} AWS AWS SDK module\n * @param {Object} opts options\n * @param {string} opts.profile profile name\n * @param {string} opts.configFile config file path\n * @return {Object}\n */\nexport default function fileConfigs(config, AWS, opts = {}) {\n  const filename = opts.configFile || process.env.AWS_CONFIG_FILE || getDefaultConfigFile();\n  if (!filename) {\n    return config;\n  }\n  const prof = opts.profile || process.env.AWS_PROFILE || 'default';\n  try {\n    const conf = AWS.util.ini.parse(AWS.util.readFileSync(filename))[prof];\n    if (typeof conf === 'object' && conf.region) {\n      return Object.assign({}, config, {region: conf.region});\n    }\n    return config;\n  } catch (err) {\n    return config;\n  }\n}\n"
   },
   {
+    "__docId__": 5,
     "kind": "function",
     "static": true,
     "variation": null,
@@ -151,6 +157,7 @@
     "generator": false
   },
   {
+    "__docId__": 6,
     "kind": "function",
     "static": true,
     "variation": null,
@@ -226,6 +233,7 @@
     "generator": false
   },
   {
+    "__docId__": 7,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -238,6 +246,7 @@
     "content": "import environmentConfigs from './configs/environmentConfigs';\nimport fileConfigs from './configs/fileConfigs';\nimport configProvider from './configProvider';\n\n/**\n * initialize AWS.config using regionProvider\n *\n * @param {Object} AWS AWS SDK module\n * @param {Object} opts options\n * @param {string} opts.profile profile name\n * @param {boolean} opts.noReflectCredentials opts.profile doesnot reflect credentials\n */\nexport default function loader(AWS, opts = {}) {\n  AWS.util.update(AWS.Config.prototype.keys, configProvider(AWS, [\n    fileConfigs,\n    environmentConfigs\n  ], opts));\n  if (!opts.noReflectCredentials) {\n    AWS.util.update(AWS.Config.prototype.keys, {\n      credentials: () => {\n        let credentials = null;\n        new AWS.CredentialProviderChain([\n          () => new AWS.EnvironmentCredentials('AWS'),\n          () => new AWS.EnvironmentCredentials('AMAZON'),\n          () => new AWS.SharedIniFileCredentials({profile: opts.profile})\n        ]).resolve((err, creds) => {\n          if (!err) {\n            credentials = creds;\n          }\n        });\n        return credentials;\n      }\n    });\n  }\n  AWS.config = new AWS.Config();\n}\n"
   },
   {
+    "__docId__": 8,
     "kind": "function",
     "static": true,
     "variation": null,
@@ -295,6 +304,7 @@
     "generator": false
   },
   {
+    "__docId__": 10,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -307,6 +317,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 11,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -319,6 +330,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 12,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -331,6 +343,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 13,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -343,6 +356,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 14,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -355,6 +369,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 15,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -367,6 +382,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 16,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -379,6 +395,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 17,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -391,6 +408,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 18,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -403,6 +421,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 19,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -415,6 +434,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 20,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -427,6 +447,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 21,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -439,6 +460,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 22,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -451,6 +473,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 23,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -463,6 +486,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 24,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -475,6 +499,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 25,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -487,6 +512,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 26,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -499,6 +525,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 27,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -511,6 +538,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 28,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -523,6 +551,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 29,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -535,6 +564,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 30,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -547,6 +577,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 31,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -559,6 +590,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 32,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -571,6 +603,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 33,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -583,6 +616,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 34,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -595,6 +629,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 35,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -607,6 +642,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 36,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -619,6 +655,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 37,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -631,6 +668,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 38,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -643,6 +681,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 39,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -655,6 +694,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 40,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -667,6 +707,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 41,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -679,6 +720,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 42,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -691,6 +733,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 43,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -703,6 +746,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 44,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -715,6 +759,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 45,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -727,6 +772,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 46,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -739,6 +785,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 47,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -751,6 +798,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 48,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -763,6 +811,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 49,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -775,6 +824,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 50,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -787,6 +837,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 51,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -799,6 +850,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 52,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -811,6 +863,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 53,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -823,6 +876,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 54,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -835,6 +889,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 55,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -847,6 +902,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 56,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -859,6 +915,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 58,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -871,6 +928,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 59,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -883,6 +941,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 60,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -895,6 +954,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 61,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -907,6 +967,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 62,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -919,6 +980,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 63,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -931,6 +993,7 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 64,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -943,6 +1006,20 @@
     "builtinExternal": true
   },
   {
+    "__docId__": 65,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "AudioContext",
+    "externalLink": "https://developer.mozilla.org/en/docs/Web/API/AudioContext",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~AudioContext",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 66,
     "kind": "testFile",
     "static": true,
     "variation": null,
@@ -955,6 +1032,7 @@
     "content": "import AWS from 'aws-sdk';\nimport assert from 'power-assert';\nimport sinon from 'sinon';\n\nimport configProvider from '../src/configProvider';\n\n\n/** @test {configProvider} */\ndescribe('configProvider()', () => {\n  it('when apply multiple getteres return overriden config', () => {\n    const getters = [\n      config => config,\n      config => Object.assign({}, config, {region: 'foo'}),\n      config => config,\n      config => Object.assign({}, config, {region: 'bar'})\n    ];\n    assert.deepEqual(configProvider(AWS, getters), {region: 'bar'});\n  });\n\n  it('when doesnot apply getters return default config', () => {\n    assert.deepEqual(configProvider(AWS, []), {region: undefined});\n  });\n\n  it('when apply options getter args applied options', () => {\n    const spy = sinon.spy(config => config);\n    const getters = [spy];\n    const opts = {profile: 'buz'};\n    assert.deepEqual(configProvider(AWS, getters, opts), {region: undefined});\n    assert(spy.args.length === 1);\n    assert.deepEqual(spy.args[0], [\n      {region: undefined},\n      AWS,\n      opts\n    ]);\n  });\n});\n"
   },
   {
+    "__docId__": 67,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -977,6 +1055,7 @@
     ]
   },
   {
+    "__docId__": 68,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -990,6 +1069,7 @@
     "lineNumber": 10
   },
   {
+    "__docId__": 69,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1003,6 +1083,7 @@
     "lineNumber": 20
   },
   {
+    "__docId__": 70,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1016,6 +1097,7 @@
     "lineNumber": 24
   },
   {
+    "__docId__": 71,
     "kind": "testFile",
     "static": true,
     "variation": null,
@@ -1028,6 +1110,7 @@
     "content": "import assert from 'power-assert';\n\nimport environmentConfigs from '../../src/configs/environmentConfigs';\nimport {resetEnv} from '../helpers';\n\n\n/** @test {environmentConfigs} */\ndescribe('environmentConfigs()', () => {\n  let defaultConfig = null;\n  beforeEach(() => {\n    resetEnv();\n    defaultConfig = {region: undefined};\n  });\n  afterEach(resetEnv);\n\n  it('when no specific env return default config', () => {\n    assert.deepEqual(environmentConfigs(defaultConfig), {region: undefined});\n  });\n\n  it('when env.AWS_REGION exists return overriden config', () => {\n    process.env.AWS_REGION = 'foo';\n    assert.deepEqual(environmentConfigs(defaultConfig), {region: 'foo'});\n  });\n\n  it('when env.AMAZON_REGION exists return overriden config', () => {\n    process.env.AMAZON_REGION = 'bar';\n    assert.deepEqual(environmentConfigs(defaultConfig), {region: 'bar'});\n  });\n\n  it('when AMAZON_REGION and AWS_REGION exists return overriden config by AWS_REGION', () => {\n    process.env.AWS_REGION = 'foo';\n    process.env.AMAZON_REGION = 'bar';\n    assert.deepEqual(environmentConfigs(defaultConfig), {region: 'foo'});\n  });\n});\n"
   },
   {
+    "__docId__": 72,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -1050,6 +1133,7 @@
     ]
   },
   {
+    "__docId__": 73,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1063,6 +1147,7 @@
     "lineNumber": 16
   },
   {
+    "__docId__": 74,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1076,6 +1161,7 @@
     "lineNumber": 20
   },
   {
+    "__docId__": 75,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1089,6 +1175,7 @@
     "lineNumber": 25
   },
   {
+    "__docId__": 76,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1102,6 +1189,7 @@
     "lineNumber": 30
   },
   {
+    "__docId__": 77,
     "kind": "testFile",
     "static": true,
     "variation": null,
@@ -1114,6 +1202,7 @@
     "content": "import path from 'path';\n\nimport AWS from 'aws-sdk';\nimport assert from 'power-assert';\nimport proxyquire from 'proxyquire';\n\nimport {resetEnv, fixtureDir} from '../helpers';\n\n\n/** @test {fileConfigs} */\ndescribe('fileConfigs()', () => {\n  const defaultConfig = {region: undefined};\n  let fileConfigs = null;\n\n  beforeEach(() => {\n    resetEnv();\n    fileConfigs = proxyquire('../../src/configs/fileConfigs', {\n      'os-homedir': () => path.join(fixtureDir(), 'default')\n    });\n  });\n\n  afterEach(() => {\n    resetEnv();\n  });\n\n  it('return default profile config', () => {\n    assert.deepEqual(fileConfigs(defaultConfig, AWS), {region: 'ap-northeast-1'});\n  });\n\n  it('when env.HOME and env.AWS_CONFIG_FILE doesnot exists return default config', () => {\n    fileConfigs = proxyquire('../../src/configs/fileConfigs', {\n      'os-homedir': () => null\n    });\n    assert.deepEqual(fileConfigs(defaultConfig, AWS), {region: undefined});\n  });\n\n  it('when default profile doesnot exists in file return default config', () => {\n    fileConfigs = proxyquire('../../src/configs/fileConfigs', {\n      'os-homedir': () => path.join(fixtureDir(), 'non-default')\n    });\n    assert.deepEqual(fileConfigs(defaultConfig, AWS), {region: undefined});\n  });\n\n  it('when set env.AWS_CONFIG_FILE return config from specific file', () => {\n    process.env.AWS_CONFIG_FILE = path.join(fixtureDir(), 'specification-config');\n    assert.deepEqual(fileConfigs(defaultConfig, AWS), {region: 'us-west-1'});\n  });\n\n  it('when config file doesnot exists return default config', () => {\n    fileConfigs = proxyquire('../../src/configs/fileConfigs', {\n      'os-homedir': () => path.join(fixtureDir(), 'unknown')\n    });\n    assert.deepEqual(fileConfigs(defaultConfig, AWS), {region: undefined});\n  });\n\n  context('when set env.AWS_PROFILE', () => {\n    it('and profile exists in file return specific profile config', () => {\n      process.env.AWS_PROFILE = 'customize';\n      assert.deepEqual(fileConfigs(defaultConfig, AWS), {region: 'us-east-1'});\n    });\n    it('and profile doesnot exists in file return default config', () => {\n      process.env.AWS_PROFILE = 'unknown';\n      assert.deepEqual(fileConfigs(defaultConfig, AWS), {region: undefined});\n    });\n  });\n\n  it('when apply opts.profile return config using opts.profile', () => {\n    assert.deepEqual(\n      fileConfigs(defaultConfig, AWS, {profile: 'customize'}),\n      {region: 'us-east-1'}\n    );\n  });\n\n  it('when apply opts.configFile return config from opts.configFile', () => {\n    const configFile = path.join(fixtureDir(), 'specification-config');\n    assert.deepEqual(\n      fileConfigs(defaultConfig, AWS, {configFile}),\n      {region: 'us-west-1'}\n    );\n  });\n});\n"
   },
   {
+    "__docId__": 78,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -1136,6 +1225,7 @@
     ]
   },
   {
+    "__docId__": 79,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1149,6 +1239,7 @@
     "lineNumber": 26
   },
   {
+    "__docId__": 80,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1162,6 +1253,7 @@
     "lineNumber": 30
   },
   {
+    "__docId__": 81,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1175,6 +1267,7 @@
     "lineNumber": 37
   },
   {
+    "__docId__": 82,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1188,6 +1281,7 @@
     "lineNumber": 44
   },
   {
+    "__docId__": 83,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1201,6 +1295,7 @@
     "lineNumber": 49
   },
   {
+    "__docId__": 84,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -1214,6 +1309,7 @@
     "lineNumber": 56
   },
   {
+    "__docId__": 85,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1227,6 +1323,7 @@
     "lineNumber": 57
   },
   {
+    "__docId__": 86,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1240,6 +1337,7 @@
     "lineNumber": 61
   },
   {
+    "__docId__": 87,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1253,6 +1351,7 @@
     "lineNumber": 67
   },
   {
+    "__docId__": 88,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1266,6 +1365,7 @@
     "lineNumber": 74
   },
   {
+    "__docId__": 89,
     "kind": "testFile",
     "static": true,
     "variation": null,
@@ -1278,6 +1378,7 @@
     "content": "import path from 'path';\n\nimport AWS from 'aws-sdk';\nimport sinon from 'sinon';\nimport assert from 'power-assert';\nimport proxyquire from 'proxyquire';\n\nimport configProvider from '../src/configProvider';\nimport environmentConfigs from '../src/configs/environmentConfigs';\nimport fileConfigs from '../src/configs/fileConfigs';\nimport {resetEnv, fixtureDir} from './helpers';\n\n\n/** @test {loader} */\ndescribe('aws-sdk-config-loader', () => {\n  let orgConfigKeys = null;\n  let loader = null;\n  let sandbox = null;\n  let stubs = null;\n\n  beforeEach(done => {\n    resetEnv();\n    process.env.HOME = path.join(fixtureDir(), 'default');\n    orgConfigKeys = Object.assign({}, AWS.Config.prototype.keys);\n    sandbox = sinon.sandbox.create();\n    stubs = {\n      configProvider: sandbox.spy(configProvider)\n    };\n    loader = proxyquire('../src', {\n      './configProvider': stubs.configProvider\n    });\n    done();\n  });\n\n  afterEach(done => {\n    resetEnv();\n    sandbox.restore();\n    stubs = null;\n    AWS.Config.prototype.keys = orgConfigKeys;\n    done();\n  });\n\n  it('override AWS.config', () => {\n    loader(AWS);\n    assert(stubs.configProvider.args.length === 1);\n    assert.deepEqual(stubs.configProvider.args[0], [\n      AWS,\n      [fileConfigs, environmentConfigs],\n      {}\n    ]);\n    assert(AWS.config.region === 'ap-northeast-1');\n    assert(AWS.config.credentials.accessKeyId === 'default_key_id');\n    assert(AWS.config.credentials.secretAccessKey === 'default_secret_key');\n  });\n\n  context('when apply options', () => {\n    it('override config and credentials', () => {\n      const opts = {profile: 'customize'};\n      loader(AWS, opts);\n      assert(stubs.configProvider.args.length === 1);\n      assert.deepEqual(stubs.configProvider.args[0], [\n        AWS,\n        [fileConfigs, environmentConfigs],\n        opts\n      ]);\n      assert(AWS.config.region === 'us-east-1');\n      assert(AWS.config.credentials.accessKeyId === 'customize_key_id');\n      assert(AWS.config.credentials.secretAccessKey === 'customize_secret_key');\n    });\n\n    it('and apply noReflectCredentials override only config', () => {\n      const opts = {\n        profile: 'customize',\n        noReflectCredentials: true\n      };\n      loader(AWS, opts);\n      assert(stubs.configProvider.args.length === 1);\n      assert.deepEqual(stubs.configProvider.args[0], [\n        AWS,\n        [fileConfigs, environmentConfigs],\n        opts\n      ]);\n      assert(AWS.config.region === 'us-east-1');\n      assert(AWS.config.credentials.accessKeyId === 'default_key_id');\n      assert(AWS.config.credentials.secretAccessKey === 'default_secret_key');\n    });\n\n    it('and apply noReflectCredentials and throw error', () => {\n      const opts = {\n        profile: 'customize'\n      };\n      class StubCredentials {\n        get(cb) {\n          cb('err');\n        }\n      }\n      sandbox.stub(AWS, 'SharedIniFileCredentials', StubCredentials);\n      loader(AWS, opts);\n      assert(AWS.config.region === 'us-east-1');\n      assert(AWS.config.credentials === null);\n    });\n  });\n});\n"
   },
   {
+    "__docId__": 90,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -1300,6 +1401,7 @@
     ]
   },
   {
+    "__docId__": 91,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1313,6 +1415,7 @@
     "lineNumber": 43
   },
   {
+    "__docId__": 92,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -1326,6 +1429,7 @@
     "lineNumber": 56
   },
   {
+    "__docId__": 93,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1339,6 +1443,7 @@
     "lineNumber": 57
   },
   {
+    "__docId__": 94,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -1352,6 +1457,7 @@
     "lineNumber": 71
   },
   {
+    "__docId__": 95,
     "kind": "testIt",
     "static": true,
     "variation": null,
