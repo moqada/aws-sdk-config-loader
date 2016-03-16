@@ -1,4 +1,6 @@
-extends: moqada
+extends:
+  - moqada
+  - moqada/node
 
 rules:
   no-param-reassign: 1
