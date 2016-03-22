@@ -1,3 +1,13 @@
+<a name="1.0.1"></a>
+## [1.0.1](https://github.com/moqada/aws-sdk-config-loader/compare/v1.0.0...v1.0.1) (2016-03-22)
+
+
+### Bug Fixes
+
+* **aws-sdk-config-loader:** Fix ReferenceError on Node 0.10.x ([de70c8f](https://github.com/moqada/aws-sdk-config-loader/commit/de70c8f))
+
+
+
 <a name="1.0.0"></a>
 # [1.0.0](https://github.com/moqada/aws-sdk-config-loader/compare/v0.3.1...v1.0.0) (2016-01-04)
 
