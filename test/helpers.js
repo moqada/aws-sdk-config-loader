@@ -18,7 +18,7 @@ function resetEnv() {
 /**
  * Return fixture directory path
  *
- * @return {{string}}
+ * @return {string}
  */
 function fixtureDir() {
   return path.join(__dirname, 'fixtures');
