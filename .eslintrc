@@ -4,3 +4,4 @@ extends:
 
 rules:
   no-param-reassign: 1
+  node/no-unsupported-features: 0
