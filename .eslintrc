@@ -4,4 +4,5 @@ extends:
 
 rules:
   no-param-reassign: 1
+  object-curly-newline: 0
   node/no-unsupported-features: 0
