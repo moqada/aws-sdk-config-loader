@@ -25,7 +25,7 @@
     "npm-run-all": "^4.0.0",
     "power-assert": "^1.0.0",
     "proxyquire": "^1.7.2",
-    "sinon": "^1.16.1"
+    "sinon": "^2.1.0"
   },
   "files": [
     "lib"
