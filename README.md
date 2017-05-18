@@ -1,5 +1,7 @@
 # aws-sdk-config-loader
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/moqada/aws-sdk-config-loader.svg)](https://greenkeeper.io/)
+
 [![NPM version][npm-image]][npm-url]
 [![NPM downloads][npm-download-image]][npm-download-url]
 [![Build Status][travis-image]][travis-url]
